@@ -13,12 +13,12 @@ class Slider extends ComponentBase
     /**
      * @var Collection
      */
-    private $items;
+    public $items;
 
     /**
      * @var Category|null
      */
-    private $category = null;
+    public $category = null;
 
 
     public function onRun()
@@ -31,11 +31,8 @@ class Slider extends ComponentBase
         }
 
         $this->category = Category::findActiveById((int) $this->property('category'));
-        if (empty($this->category)) {
-            $this->items = new Collection();
-        } else {
-            $this->items = Slide::findAllByCategoryId($this->category->id);
-        }
+        
+        $this->items = empty($this->category) ? new Collection() : Slide::findAllByCategoryId($this->category->id);
     }
 
     public function onRender()
@@ -161,17 +158,11 @@ class Slider extends ComponentBase
 
     private function getSliderWidth(): ?string
     {
-        if ($this->isMobile()) {
-            return $this->property('mobile_width');
-        }
-        return $this->property('width');
+       return $this->items = ($this->isMobile()) ? $this->property('mobile_width') : $this->property('width');
     }
 
     public function getSliderHeight(): ?string
     {
-        if ($this->isMobile()) {
-            return $this->property('mobile_height');
-        }
-        return $this->property('height');
+        return $this->items = ($this->isMobile()) ? $this->property('mobile_height') : $this->property('height');
     }
 }
